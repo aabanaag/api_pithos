@@ -23,6 +23,8 @@ services:
     ports:
       - '8000:8000'
     command: /start
+    networks:
+        - elastic
 
   postgres:
     build:
@@ -35,16 +37,24 @@ services:
       - api_pithos_local_postgres_data_backups:/backups
     env_file:
       - ./.envs/.local/.postgres
+    ports:
+        - '5432:5432'
+    networks:
+      - elastic
 
   mailpit:
     image: docker.io/axllent/mailpit:latest
     container_name: api_pithos_local_mailpit
     ports:
       - "8025:8025"
+    networks:
+      - elastic
 
   redis:
     image: docker.io/redis:6
     container_name: api_pithos_local_redis
+    networks:
+      - elastic
 
     volumes:
       - api_pithos_local_redis_data:/data
@@ -59,6 +69,8 @@ services:
       - postgres
       - mailpit
     ports: []
+    networks:
+      - elastic
     command: /start-celeryworker
 
   celerybeat:
@@ -70,6 +82,8 @@ services:
       - postgres
       - mailpit
     ports: []
+    networks:
+      - elastic
     command: /start-celerybeat
 
   flower:
@@ -78,6 +92,8 @@ services:
     container_name: api_pithos_local_flower
     ports:
       - '5555:5555'
+    networks:
+      - elastic
     command: /start-flower
 
   elasticsearch:
@@ -87,6 +103,8 @@ services:
       - ./data/elastic:/var/lib/elasticsearch/data
     environment:
       - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ELASTIC_PASSWORD=password
     ports:
       - 9200:9200
     networks:

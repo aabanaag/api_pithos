@@ -12,7 +12,8 @@ class BaseModel(models.Model):
 
 class Lead(BaseModel):
     linkedin_url = models.URLField(max_length=200, unique=True)
-    description = models.TextField()
+    is_demo_lead = models.BooleanField(default=False)
+    description = models.TextField(blank=True)
     n_employee = models.IntegerField()
     raw_json = models.JSONField()
     company_name_linkedin = models.CharField(max_length=200)

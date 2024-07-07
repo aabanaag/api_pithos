@@ -327,7 +327,7 @@ SOCIALACCOUNT_FORMS = {"signup": "api_pithos.users.forms.UserSocialSignupForm"}
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -352,6 +352,12 @@ SPECTACULAR_SETTINGS = {
 # ------------------------------------------------------------------------------
 ELASTICSEARCH_DSL = {
     "default": {
-        "hosts": "elasticsearch:9200",
+        "hosts": ["http://elasticsearch:9200"],
+        "http_auth": ("elastic", "password"),
+        "verify_certs": False,
     },
+}
+
+ELASTICSEARCH_INDEX_NAMES = {
+    "core.lead": "leads",
 }
