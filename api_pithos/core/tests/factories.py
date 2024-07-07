@@ -14,7 +14,7 @@ class LeadFactory(DjangoModelFactory):
     linkedin_url = Faker("url")
     description = Faker("text")
     n_employee = Faker("random_int", min=1, max=100)
-    raw_json = Faker("pydict")
+    raw_json = Faker("json")
     company_name_linkedin = Faker("company")
     url = Faker("url")
     urn = Faker("uuid4")
@@ -29,7 +29,7 @@ class EmployeeFactory(DjangoModelFactory):
     first_name = Faker("first_name")
     last_name = Faker("last_name")
     urn = Faker("uuid4")
-    raw_json = Faker("pydict")
+    raw_json = Faker("json")
 
     class Meta:
         model = Employee
