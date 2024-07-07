@@ -81,7 +81,7 @@ services:
     command: /start-flower
 
   elasticsearch:
-    image: elasticsearch:7.14.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.1
     container_name: api_pithos_local_elasticsearch
     volumes:
       - ./data/elastic:/var/lib/elasticsearch/data

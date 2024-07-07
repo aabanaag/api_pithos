@@ -7,6 +7,7 @@ hiredis==2.3.2  # https://github.com/redis/hiredis-py
 celery==5.4.0  # pyup: < 6.0  # https://github.com/celery/celery
 django-celery-beat==2.6.0  # https://github.com/celery/django-celery-beat
 flower==2.0.1  # https://github.com/mher/flower
+pandas==2.2.2 # https://github.com/pandas-dev/pandas
 
 # Django
 # ------------------------------------------------------------------------------
@@ -25,5 +26,5 @@ drf-spectacular==0.27.2  # https://github.com/tfranzel/drf-spectacular
 
 # Elasticsearch
 # ------------------------------------------------------------------------------
-django-elasticsearch-dsl==8.0.0  # https://github.com/django-es/django-elasticsearch-dsl
-django-elasticsearch-dsl-drf==0.22.5  # https://github.com/barseghyanartur/django-elasticsearch-dsl-drf/
+django-elasticsearch-dsl==8.0  # https://github.com/django-es/django-elasticsearch-dsl
+-e git+https://github.com/aabanaag/django-elasticsearch-dsl-drf.git#egg=django-elasticsearch-dsl-drf

@@ -5,6 +5,9 @@ FROM docker.io/python:3.12.4-slim-bookworm AS python
 # Python build stage
 FROM python AS python-build-stage
 
+# Install Git
+RUN apt-get update && apt-get install -y git
+
 ARG BUILD_ENVIRONMENT=production
 
 # Install apt packages

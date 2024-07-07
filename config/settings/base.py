@@ -83,12 +83,13 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "drf_spectacular",
     "django_elasticsearch_dsl",
-    "django_elasticsearch_dsl_drf"
+    "django_elasticsearch_dsl_drf",
 ]
 
 LOCAL_APPS = [
     "api_pithos.users",
     # Your stuff: custom apps go here
+    "api_pithos.core",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -350,7 +351,7 @@ SPECTACULAR_SETTINGS = {
 # Elasticsearch
 # ------------------------------------------------------------------------------
 ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': 'elasticsearch:9200'
+    "default": {
+        "hosts": "elasticsearch:9200",
     },
 }
