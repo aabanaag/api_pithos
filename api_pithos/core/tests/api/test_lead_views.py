@@ -16,7 +16,7 @@ class TestLeadViews(APITestCase):
     def setUp(self):
         super().setUp()
 
-        self.lead = LeadFactory.create()
+        self.lead = LeadFactory.create(description="A description")
         self.user = UserFactory.create()
 
     def test_should_not_allow_unauthenticated_users_to_list_leads(self):
@@ -61,3 +61,15 @@ class TestLeadViews(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["linkedin_url"], self.lead.linkedin_url)
+
+    def test_should_search_leads(self):
+        self.client.force_authenticate(user=self.user)
+
+        LeadFactory.create(description="Please describe")
+        LeadFactory.create()
+
+        url = reverse("api:core:lead-list")
+        response = self.client.get(f"{url}?search=descr")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()), 2)

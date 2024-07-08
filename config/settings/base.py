@@ -84,6 +84,8 @@ THIRD_PARTY_APPS = [
     "drf_spectacular",
     "django_elasticsearch_dsl",
     "django_elasticsearch_dsl_drf",
+    "import_export",
+    "django_filters",
 ]
 
 LOCAL_APPS = [
@@ -331,6 +333,7 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
 }
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
