@@ -83,12 +83,13 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "drf_spectacular",
     "django_elasticsearch_dsl",
-    "django_elasticsearch_dsl_drf"
+    "django_elasticsearch_dsl_drf",
 ]
 
 LOCAL_APPS = [
     "api_pithos.users",
     # Your stuff: custom apps go here
+    "api_pithos.core",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -326,7 +327,7 @@ SOCIALACCOUNT_FORMS = {"signup": "api_pithos.users.forms.UserSocialSignupForm"}
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -350,7 +351,13 @@ SPECTACULAR_SETTINGS = {
 # Elasticsearch
 # ------------------------------------------------------------------------------
 ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': 'elasticsearch:9200'
+    "default": {
+        "hosts": ["http://elasticsearch:9200"],
+        "http_auth": ("elastic", "password"),
+        "verify_certs": False,
     },
+}
+
+ELASTICSEARCH_INDEX_NAMES = {
+    "core.lead": "leads",
 }

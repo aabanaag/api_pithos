@@ -79,7 +79,7 @@ services:
       - production_postgres_data_backups:/backups:z
 
   elasticsearch:
-    image: elasticsearch:7.14.0
+    image: elasticsearch:8.14.1
     volumes:
       - ./data/elastic:/var/lib/elasticsearch/data
     environment:
