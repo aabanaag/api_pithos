@@ -1,51 +1,37 @@
 from django.contrib.postgres.search import SearchVector
-from django.contrib.postgres.search import TrigramSimilarity
-from django.db.models import CharField
-from django.db.models import Q
-from django.db.models.functions import Cast
-from django.db.models.functions import Greatest
 from django_filters import rest_framework as filters
 
+from api_pithos.core.models import Employee
 from api_pithos.core.models import Lead
 
 
 class LeadFilter(filters.FilterSet):
-    search = filters.CharFilter(method="filter_search")
+    search = filters.CharFilter(method="search_filter")
 
     class Meta:
         model = Lead
-        fields = (
-            "linkedin_url",
-            "n_employee",
-            "company_name_linkedin",
-            "url",
-            "urn",
-            "campaign_id",
-        )
+        fields = {
+            "n_employee": ["exact", "lt", "lte", "gt", "gte"],
+            "company_name_linkedin": ["exact", "icontains"],
+        }
 
-    def filter_search(self, queryset, name, value):
-        search_fields = [
-            "linkedin_url",
-            "description",
-            "company_name_linkedin",
-            "url",
-            "urn",
-            "campaign_id",
-        ]
+    def search_filter(self, queryset, name, value):
+        return queryset.annotate(
+            search=SearchVector("linkedin_url", "description", "company_name_linkedin")
+        ).filter(search__icontains=value)
 
-        search_conditions = []
-        for criteria in search_fields:
-            search_conditions.extend(
-                [
-                    TrigramSimilarity(criteria, value),
-                ]
+
+class EmployeeFilter(filters.FilterSet):
+    search = filters.CharFilter(method="search_filter")
+
+    class Meta:
+        model = Employee
+        exclude = ["raw_json"]
+
+    def search_filter(self, queryset, name, value):
+        return queryset.annotate(
+            search=SearchVector(
+                "first_name",
+                "last_name",
             )
-
-        return (
-            queryset.annotate(
-                similarity=Greatest(*search_conditions),
-                search=SearchVector(Cast("n_employee", CharField())),
-            )
-            .filter(Q(similarity__gt=0.2) | Q(search__icontains=value))
-            .order_by("-similarity")
-        )
+        ).filter(search__icontains=value)
