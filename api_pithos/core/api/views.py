@@ -1,9 +1,12 @@
 from django_elasticsearch_dsl_drf.constants import SUGGESTER_COMPLETION
 from django_elasticsearch_dsl_drf.filter_backends import SearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
+from api_pithos.core.api.filters import EmployeeFilter
+from api_pithos.core.api.filters import LeadFilter
 from api_pithos.core.api.serializers import EmployeeDetailSerializer
 from api_pithos.core.api.serializers import EmployeeListSerializer
 from api_pithos.core.api.serializers import LeadDetailSerializer
@@ -55,6 +58,8 @@ class LeadDocumentViewSet(DocumentViewSet):
 class LeadViewSet(ModelViewSet):
     queryset = Lead.objects.all()
     permission_classes = [IsAuthenticated]
+    filterset_class = LeadFilter
+    filter_backends = (DjangoFilterBackend,)
 
     def get_serializer_class(self):
         if self.action in ["list", "create", "update"]:
@@ -65,6 +70,8 @@ class LeadViewSet(ModelViewSet):
 class EmployeeViewSet(ModelViewSet):
     queryset = Employee.objects.all()
     permission_classes = [IsAuthenticated]
+    filterset_class = EmployeeFilter
+    filter_backends = (DjangoFilterBackend,)
 
     def get_serializer_class(self):
         if self.action in ["list", "create", "update"]:

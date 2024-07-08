@@ -18,7 +18,9 @@ class TestEmployeeViews(APITestCase):
         super().setUp()
 
         self.lead = LeadFactory.create()
-        self.employee = EmployeeFactory.create(lead=self.lead)
+        self.employee = EmployeeFactory.create(
+            lead=self.lead, first_name="John", last_name="Doe"
+        )
         self.user = UserFactory.create()
 
     def test_should_not_allow_unauthenticated_users_to_list_employees(self):
@@ -64,3 +66,25 @@ class TestEmployeeViews(APITestCase):
 
         self.assertEqual(lead["id"], self.lead.id)
         self.assertEqual(lead["linkedin_url"], self.lead.linkedin_url)
+
+    def test_should_search_leads(self):
+        self.client.force_authenticate(user=self.user)
+
+        EmployeeFactory.create(first_name="Jan", last_name="Doeherty")
+        EmployeeFactory.create_batch(2)
+
+        url = reverse("api:core:employee-list")
+        url = f"{url}?search=doe"
+
+        response = self.client.get(url, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        count = response.json()["count"]
+
+        self.assertEqual(count, 2)
+
+        last_names = [
+            employee["last_name"].lower() for employee in response.json()["results"]
+        ]
+        self.assertIn("doe", last_names)
