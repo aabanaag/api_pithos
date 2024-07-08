@@ -7,6 +7,9 @@ FROM python AS python-build-stage
 
 ENV PYTHONDONTWRITEBYTECODE 1
 
+# Install Git
+RUN apt-get update && apt-get install -y git
+
 RUN apt-get update && apt-get install --no-install-recommends -y \
   # dependencies for building Python packages
   build-essential \
