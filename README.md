@@ -95,4 +95,4 @@ See detailed [cookiecutter-django Docker documentation](http://cookiecutter-djan
 
 ### Postman
 
-[![Run in Postman](https://run.pstmn.io/button.svg)]([<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height: 32px;">](https://app.getpostman.com/run-collection/48815-eb54c55e-9121-4d30-bf4a-335d8454b4d9?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D48815-eb54c55e-9121-4d30-bf4a-335d8454b4d9%26entityType%3Dcollection%26workspaceId%3D70373f6f-5ffc-4421-8372-907e4f05cc9c))
+[<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height: 32px;">](https://app.getpostman.com/run-collection/48815-eb54c55e-9121-4d30-bf4a-335d8454b4d9?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D48815-eb54c55e-9121-4d30-bf4a-335d8454b4d9%26entityType%3Dcollection%26workspaceId%3D70373f6f-5ffc-4421-8372-907e4f05cc9c)
