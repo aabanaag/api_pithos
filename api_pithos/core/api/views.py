@@ -1,7 +1,5 @@
-from django_elasticsearch_dsl_drf.constants import SUGGESTER_COMPLETION
-from django_elasticsearch_dsl_drf.filter_backends import SearchFilterBackend
-from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
@@ -9,50 +7,12 @@ from api_pithos.core.api.filters import EmployeeFilter
 from api_pithos.core.api.filters import LeadFilter
 from api_pithos.core.api.serializers import EmployeeDetailSerializer
 from api_pithos.core.api.serializers import EmployeeListSerializer
+from api_pithos.core.api.serializers import ExportSerializer
 from api_pithos.core.api.serializers import LeadDetailSerializer
-from api_pithos.core.api.serializers import LeadDocumentSerializer
 from api_pithos.core.api.serializers import LeadListSerializer
-from api_pithos.core.documents import LeadDocument
 from api_pithos.core.models import Employee
 from api_pithos.core.models import Lead
-
-
-class LeadDocumentViewSet(DocumentViewSet):
-    document = LeadDocument
-    serializer_class = LeadDocumentSerializer
-    filter_backends = [
-        SearchFilterBackend,
-    ]
-    search_fields = (
-        "linkedin_url",
-        "description",
-        "n_employee",
-        "raw_json",
-        "company_name_linkedin",
-        "url",
-        "urn",
-        "campaign_id",
-    )
-    suggester_fields = {
-        "linkedin_url": {
-            "field": "linkedin_url.suggest",
-            "suggesters": [
-                SUGGESTER_COMPLETION,
-            ],
-        },
-        "description": {
-            "field": "description.suggest",
-            "suggesters": [
-                SUGGESTER_COMPLETION,
-            ],
-        },
-        "raw_json": {
-            "field": "raw_json.suggest",
-            "suggesters": [
-                SUGGESTER_COMPLETION,
-            ],
-        },
-    }
+from api_pithos.core.services import export_to_csv
 
 
 class LeadViewSet(ModelViewSet):
@@ -66,6 +26,13 @@ class LeadViewSet(ModelViewSet):
             return LeadListSerializer
         return LeadDetailSerializer
 
+    @action(detail=False, methods=["post"], url_path="export")
+    def export_lead(self, request):
+        serializer = ExportSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        return export_to_csv(ids=serializer.validated_data["ids"], model="lead")
+
 
 class EmployeeViewSet(ModelViewSet):
     queryset = Employee.objects.all()
@@ -77,3 +44,10 @@ class EmployeeViewSet(ModelViewSet):
         if self.action in ["list", "create", "update"]:
             return EmployeeListSerializer
         return EmployeeDetailSerializer
+
+    @action(detail=False, methods=["post"], url_path="export")
+    def export_employee(self, request):
+        serializer = ExportSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        return export_to_csv(ids=serializer.validated_data["ids"], model="employee")
