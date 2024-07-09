@@ -351,17 +351,3 @@ SPECTACULAR_SETTINGS = {
 }
 # Your stuff...
 # ------------------------------------------------------------------------------
-
-# Elasticsearch
-# ------------------------------------------------------------------------------
-ELASTICSEARCH_DSL = {
-    "default": {
-        "hosts": ["http://elasticsearch:9200"],
-        "http_auth": ("elastic", "password"),
-        "verify_certs": False,
-    },
-}
-
-ELASTICSEARCH_INDEX_NAMES = {
-    "core.lead": "leads",
-}
